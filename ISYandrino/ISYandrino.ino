@@ -1,18 +1,18 @@
 /*
-  SimpleMQTTClient.ino
-  The purpose of this exemple is to illustrate a simple handling of MQTT and Wifi connection.
-  Once it connects successfully to a Wifi network and a MQTT broker, it subscribe to a topic and send a message to it.
-  It will also send a message delayed 5 seconds later.
+ verson 0.0.1
+  this will be my lib for adding esp32 modules to my universal devices controlers  
 */
 #include <ArduinoJson.h>
 #include "EspMQTTClient.h"
 String message;
+String statmessage;
 const int Analogin = 36;
 const int DigIn = 23;
 const int Digout = 16;
 const int Bultinled = 2;
 char Device[] = "mydevice";
 DynamicJsonDocument  doc(1024);
+DynamicJsonDocument  mystat(1024);
 
 
 EspMQTTClient client(
@@ -31,7 +31,14 @@ Serial.begin(115200);
 doc["AI1"] = "Battery Voltage";
 doc["AO1"] = "Light output";
 doc["DO1"] = "Batt Charger";
+doc["DO2"] = "Light";
 serializeJson(doc, message);
+
+mystat["AI1"] = 13.6;
+mystat["AO1"] = 125;
+mystat["DO1"] = 100;
+mystat["DO2"] = 0;
+serializeJson(mystat, statmessage);
 
   // Optional functionalities of EspMQTTClient
   client.enableDebuggingMessages(); // Enable debugging messages sent to serial output
@@ -93,10 +100,10 @@ void loop()
  int me;
   client.loop();
   me = me++;
-  delay(5000);
+  delay(15000);
   // Execute delayed instructions
     
-// client.publish(mesg + "/status", "my status is " + String( analogRead( Analogin )));
+client.publish(mesg + "/status", statmessage);
  //client.publish(mesg + "/cmd", "my cmd is " + String( digitalRead( Digout )));
 // Publish a message to "mytopic/Discovery"
 }

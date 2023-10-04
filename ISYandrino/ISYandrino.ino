@@ -1,6 +1,6 @@
 /*
- verson 0.0.1
-  this will be my lib for adding esp32 modules to my universal devices controlers  
+version 0.0.1
+  this will be my lib for adding esp32 modules to my universal devices controlers 
 */
 #include <ArduinoJson.h>
 #include "EspMQTTClient.h"
@@ -100,7 +100,7 @@ void loop()
  int me;
   client.loop();
   me = me++;
-  delay(15000);
+  delay(5000);
   // Execute delayed instructions
     
 client.publish(mesg + "/status", statmessage);

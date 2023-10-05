@@ -13,6 +13,7 @@ const int Bultinled = 2;
 char Device[] = "mydevice";
 DynamicJsonDocument  doc(1024);
 DynamicJsonDocument  mystat(1024);
+int me;
 
 
 EspMQTTClient client(
@@ -57,7 +58,6 @@ void onConnectionEstablished()
 {
  String mesg;
  mesg = Device;
- int me;
  //String mesg;
  //char mesg[] = Device;
    IPAddress myIP = WiFi.softAPIP();
@@ -84,7 +84,6 @@ void onConnectionEstablished()
  if (payload == "1")
  {
   client.publish(mesg + "/Discovery", message ); // You can activate the retain flag by setting the third parameter to true
-Serial.println("(From status) topic: " + topic + ", payload: " + message);
 }});
 
   // Execute delayed instructions
@@ -97,15 +96,20 @@ void loop()
 {
  String mesg;
  mesg = Device;
- int me;
-  client.loop();
-  me = me++;
-  delay(5000);
+   client.loop();
+  me = me + 1;
   // Execute delayed instructions
-    
+
+if (me >= 24000)   {
 client.publish(mesg + "/status", statmessage);
+me=0;
  //client.publish(mesg + "/cmd", "my cmd is " + String( digitalRead( Digout )));
 // Publish a message to "mytopic/Discovery"
+  Serial.println(me);
+
+}
+  Serial.println(me);
+
 }
 
 

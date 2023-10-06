@@ -3,18 +3,78 @@ version 0.0.1
   this will be my lib for adding esp32 modules to my universal devices controlers 
 */
 #include <ArduinoJson.h>
-#include "EspMQTTClient.h"
+#include "ISYarduino.h"
+
+class isyMQTT {
+
+public:
+
+    void ISYmqtt(void)
+    {
+
+
+    };
+
 String message;
+
+private:
+
+int pincount;
+int totalpins;
+int analogcount;
+int analoginval[5];
+int *var1;
+int analogoutcount;
+int analogoutval[5];
+int *analogoutvar1;
+public:
+
+void start(int analogin, int analogout, int digitalin, int digitalout)
+{
+  totalpins = analogin + analogout + digitalin + digitalout;
+pincount = 1;
+analogcount = 0;
+analogcount = 0;
+
+doc["AO1"] = "Light output";
+doc["DO1"] = "Batt Charger";
+doc["DO2"] = "Light";
+serializeJson(doc, message);
+}
+
+void analoginput( int &var1 , char displayname1[]
+)
+{
+    analogcount++;
+    doc["AI" + String(analogcount)] = displayname1;
+    analoginval[analogcount] = *analoginval;
+}
+
+void analogoutput( int &analogoutvar1 , char displayname1[]
+)
+{
+    analogoutcount++;
+    doc["AO" + String(analogoutcount)] = displayname1;
+    analogoutval[analogoutcount] = *analogoutval;
+}
+
+
+private:
+
+
+};
+
+#include "EspMQTTClient.h"
+isyMQTT thismqtt;
+
 String statmessage;
 const int Analogin = 36;
 const int DigIn = 23;
 const int Digout = 16;
 const int Bultinled = 2;
 char Device[] = "mydevice";
-DynamicJsonDocument  doc(1024);
 DynamicJsonDocument  mystat(1024);
 int me;
-
 
 EspMQTTClient client(
   "espdevices",
@@ -25,15 +85,15 @@ EspMQTTClient client(
   Device,     // Client name that uniquely identify your device
   1884              // The MQTT port, default to 1883. this line can be omitted
 );
+int tst;
 
 void setup()
 {
+
 Serial.begin(115200);
-doc["AI1"] = "Battery Voltage";
-doc["AO1"] = "Light output";
-doc["DO1"] = "Batt Charger";
-doc["DO2"] = "Light";
-serializeJson(doc, message);
+thismqtt.start(1,1,0,2);
+thismqtt.analoginput(tst,"battery voltage");
+
 
 mystat["AI1"] = 13.6;
 mystat["AO1"] = 125;
@@ -83,7 +143,7 @@ void onConnectionEstablished()
  mesg = Device;
  if (payload == "1")
  {
-  client.publish(mesg + "/Discovery", message ); // You can activate the retain flag by setting the third parameter to true
+  client.publish(mesg + "/Discovery", thismqtt.message ); // You can activate the retain flag by setting the third parameter to true
 }});
 
   // Execute delayed instructions
@@ -111,5 +171,4 @@ me=0;
   Serial.println(me);
 
 }
-
-
+

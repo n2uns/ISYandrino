@@ -11,6 +11,11 @@ public:
 
     void ISYmqtt(void)
     {
+    pincount = 1;
+    analogcount = 0;
+    analogoutcount = 0;
+    digitaloutcount = 0;
+    digitalincount = 0;
 
 
     };
@@ -27,19 +32,20 @@ int *var1;
 int analogoutcount;
 int analogoutval[5];
 int *analogoutvar1;
+
+int digitalincount;
+int digitalinval[5];
+int *digitalinvar1;
+int digitaloutcount;
+int digitaloutval[5];
+int *digitaloutvar1;
+
 public:
 
 void start(int analogin, int analogout, int digitalin, int digitalout)
 {
   totalpins = analogin + analogout + digitalin + digitalout;
-pincount = 1;
-analogcount = 0;
-analogcount = 0;
 
-doc["AO1"] = "Light output";
-doc["DO1"] = "Batt Charger";
-doc["DO2"] = "Light";
-serializeJson(doc, message);
 }
 
 void analoginput( int &var1 , char displayname1[]
@@ -58,7 +64,27 @@ void analogoutput( int &analogoutvar1 , char displayname1[]
     analogoutval[analogoutcount] = *analogoutval;
 }
 
+void digitalinput( int &digitalinvar1 , char displayname1[]
+)
+{
+    digitalincount++;
+    doc["DI" + String(digitalincount)] = displayname1;
+    analoginval[digitalincount] = *digitalinval;
+}
 
+void digitaloutput( int &digitaloutvar1 , char displayname1[]
+)
+{
+    digitaloutcount++;
+    doc["DO" + String(digitaloutcount)] = displayname1;
+    analogoutval[digitaloutcount] = *digitaloutval;
+}
+
+void run(void)
+{
+serializeJson(doc, message);
+
+}
 private:
 
 
@@ -86,6 +112,9 @@ EspMQTTClient client(
   1884              // The MQTT port, default to 1883. this line can be omitted
 );
 int tst;
+int lightout;
+int battcharge;
+int lightsw;
 
 void setup()
 {
@@ -93,7 +122,10 @@ void setup()
 Serial.begin(115200);
 thismqtt.start(1,1,0,2);
 thismqtt.analoginput(tst,"battery voltage");
-
+thismqtt.analogoutput(lightout,"Light Brightness");
+thismqtt.digitaloutput(battcharge,"Battery charger sw");
+thismqtt.digitaloutput(lightsw,"Light sw");
+thismqtt.run();
 
 mystat["AI1"] = 13.6;
 mystat["AO1"] = 125;

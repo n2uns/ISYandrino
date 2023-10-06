@@ -1,4 +1,4 @@
-# ISYardino
+# ISYarduino
 interface to isy from esp32
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/exking/udi-mqtt-poly/blob/master/LICENSE)

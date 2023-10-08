@@ -61,7 +61,7 @@ void loop()
   // Execute delayed instructions
 if (me >= 120000)   {
 me=0;
-tst = 1543;
+tst = 156;
  //client.publish(mesg + "/cmd", "my cmd is " + String( digitalRead( Digout )));
 // Publish a message to "mytopic/Discovery"
 

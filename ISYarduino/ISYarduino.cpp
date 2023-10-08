@@ -73,11 +73,12 @@ serializeJson(doc, message);
 
 }
 
-void isyMQTT::loop(void)
+void isyMQTT::loop(void)               //////////////////////////  main loop check for changes in any of the io's and publish them to the node server
 {
   isyclient->loop();
 int thevalue;
 String mesg;
+ mesg = Device;
 String dataoutput;
 int newdataflage = 0;
  mesg = Device;
@@ -164,11 +165,12 @@ int newdataflage = 0;
     }
 if (newdataflage == 1)
 {
-               Serial.println(thevalue);
-               Serial.println(thevalue);
-               Serial.println(thevalue);
-               Serial.println(thevalue);
-               Serial.println(thevalue);
+
+serializeJson(mystatus, statmessage);
+isyclient->publish(mesg + "/status", statmessage ); // You can activate the retain flag by setting the third parameter to true
+
+               Serial.println(statmessage);
+statmessage = "";
 newdataflage = 0;
 }
 
@@ -182,7 +184,7 @@ String mesg;
    IPAddress myIP = WiFi.softAPIP();
   Serial.print("AP IP address: ");
   Serial.println(myIP);
- // Subscribe to "mytopic/test" and display received message to Serial
+ /////////////////////////////////////////////////////////////////////////////////// Subscribe to "mytopic/cmd" and update the outputs they point to
 isyclient->subscribe(mesg + "/cmd", [](const String & payload) {
     Serial.println("fron cmd" + payload);
   });

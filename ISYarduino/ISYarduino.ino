@@ -22,11 +22,11 @@ const int Digout = 16;
 const int Bultinled = 2;
 int me;
 
-int tst;
+int testanalogin;
 int lightout;
 int battcharge;
 int lightsw;
-
+int a2;
 
 
 
@@ -38,15 +38,16 @@ Serial.begin(115200);
 thismqtt.start(1,1,0,2);  //start the connection start(num of digital imputs, num of digital outputs, number of analog inputs, num of anilog outputs)
 
 ////// each io is declared type of io (variable int, discription to be displayed)
-thismqtt.analoginput(&tst,"battery voltage");
-thismqtt.analogoutput(&lightout,"Light Brightness");
-thismqtt.digitaloutput(&battcharge,"Battery charger sw");
-thismqtt.digitaloutput(&lightsw,"Light sw");
+thismqtt.analoginput(&testanalogin,"battery voltage");
+thismqtt.analogoutput(&lightout,"my AO1");
+thismqtt.analogoutput(&a2,"my AO2");
+thismqtt.digitaloutput(&battcharge,"my DO1");
+thismqtt.digitaloutput(&lightsw,"my DO2");
 thismqtt.run(&thismqtt); //// builds discriptor of the node infomation
 
   pinMode (Digout, OUTPUT);
   pinMode (DigIn, INPUT);
-tst = 288;
+testanalogin = 288;
  
 
 }
@@ -58,15 +59,16 @@ void loop()
  //mesg = Device;
 //   client.loop();
   me = me + 1;
-  // Execute delayed instructions
-if (me >= 120000)   {
-me=0;
-tst = 156;
- //client.publish(mesg + "/cmd", "my cmd is " + String( digitalRead( Digout )));
-// Publish a message to "mytopic/Discovery"
-
+  // Execute delayed toggle of analog in without slowing down loop
+if ((me >= 120000) && (me <= 240000))   {
+testanalogin = 156;
 }
-//  Serial.println(me);
+if (me >= 240000)   {
+testanalogin = 586;
+me = 0;
+}
+//              Serial.println(String(battcharge) + "batt");
+//              Serial.println(String(lightsw) + "light");
   thismqtt.loop();
 
 }

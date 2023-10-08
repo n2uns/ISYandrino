@@ -38,14 +38,15 @@ Serial.begin(115200);
 thismqtt.start(1,1,0,2);  //start the connection start(num of digital imputs, num of digital outputs, number of analog inputs, num of anilog outputs)
 
 ////// each io is declared type of io (variable int, discription to be displayed)
-thismqtt.analoginput(tst,"battery voltage");
-thismqtt.analogoutput(lightout,"Light Brightness");
-thismqtt.digitaloutput(battcharge,"Battery charger sw");
-thismqtt.digitaloutput(lightsw,"Light sw");
+thismqtt.analoginput(&tst,"battery voltage");
+thismqtt.analogoutput(&lightout,"Light Brightness");
+thismqtt.digitaloutput(&battcharge,"Battery charger sw");
+thismqtt.digitaloutput(&lightsw,"Light sw");
 thismqtt.run(); //// builds discriptor of the node infomation
 
   pinMode (Digout, OUTPUT);
   pinMode (DigIn, INPUT);
+tst = 288;
  
 
 }
@@ -58,9 +59,9 @@ void loop()
 //   client.loop();
   me = me + 1;
   // Execute delayed instructions
-
-if (me >= 24000)   {
+if (me >= 120000)   {
 me=0;
+tst = 1543;
  //client.publish(mesg + "/cmd", "my cmd is " + String( digitalRead( Digout )));
 // Publish a message to "mytopic/Discovery"
 

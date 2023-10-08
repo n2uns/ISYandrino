@@ -42,7 +42,7 @@ thismqtt.analoginput(&tst,"battery voltage");
 thismqtt.analogoutput(&lightout,"Light Brightness");
 thismqtt.digitaloutput(&battcharge,"Battery charger sw");
 thismqtt.digitaloutput(&lightsw,"Light sw");
-thismqtt.run(); //// builds discriptor of the node infomation
+thismqtt.run(&thismqtt); //// builds discriptor of the node infomation
 
   pinMode (Digout, OUTPUT);
   pinMode (DigIn, INPUT);

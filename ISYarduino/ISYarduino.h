@@ -17,7 +17,7 @@ void analoginput( int* var1 , char displayname1[]);
 void analogoutput( int* analogoutvar1 , char displayname1[]);
 void digitalinput( int* digitalinvar1 , char displayname1[]);
 void digitaloutput( int* digitaloutvar1 , char displayname1[]);
-void run(isyMQTT* mymqtt);
+void run(isyMQTT* mymqtt, char mydevice[]);
 void loop(void);
 
 int pincount;
@@ -58,7 +58,7 @@ String message;
 String statmessage;
 int setupdone = 0;
 
-char Device[] = "mydevice";
+String(Device);
 
 EspMQTTClient* isyclient;
 isyMQTT* isymqtt;
@@ -120,13 +120,12 @@ void isyMQTT::digitaloutput( int *digitaloutvar1 , char displayname1[]
     digitaloutval[digitaloutcount] = digitaloutvar1;
 }
 
-void isyMQTT::run(isyMQTT* mymqtt)
+void isyMQTT::run(isyMQTT* mymqtt, char mydevice[])
 {
 isymqtt = mymqtt;
-
+Device = mydevice;
 serializeJson(doc, message);
-  // Optional functionalities of EspMQTTClient
-  //client.enableLastWillMessage( toCharArray(mesg) , "I am going offline");  // You can activate the retain flag by setting the third parameter to true
+
 
 }
 

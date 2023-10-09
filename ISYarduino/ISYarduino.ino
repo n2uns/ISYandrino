@@ -1,6 +1,7 @@
-
+// 1.0.0
 
 #include "ISYarduino.h"
+char devicename[] = "mydevice";  //// needs to be the name of you give your device and has to match the name is the node server
 
 //////////////////////////////////////////// creat the MQTT conection 
   EspMQTTClient client(
@@ -9,10 +10,9 @@
   "192.168.18.185",  // MQTT Broker server ip
   "admin",   // Can be omitted if not needed
   "kevin8386",   // Can be omitted if not needed
-  "mydevice",     // Client name that uniquely identify your device
+  devicename,     // Client name that uniquely identify your device
   1884              // The MQTT port, default to 1883. this line can be omitted
 );
-
 isyMQTT thismqtt( &client);
 
 
@@ -43,7 +43,7 @@ thismqtt.analogoutput(&lightout,"my AO1");
 thismqtt.analogoutput(&a2,"my AO2");
 thismqtt.digitaloutput(&battcharge,"my DO1");
 thismqtt.digitaloutput(&lightsw,"my DO2");
-thismqtt.run(&thismqtt); //// builds discriptor of the node infomation
+thismqtt.run(&thismqtt, devicename); //// builds discriptor of the node infomation
 
   pinMode (Digout, OUTPUT);
   pinMode (DigIn, INPUT);

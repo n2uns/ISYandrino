@@ -7,6 +7,8 @@ This lib provides an interface between MQTT broker and ESP32 module.
 
 ### Installation instructions
 copy the dir and add it to your lib dir
+the node server for this lib is at
+https://github.com/n2uns/Audrino_Mqtt
 
 ### Notes
 

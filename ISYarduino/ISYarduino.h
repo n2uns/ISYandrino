@@ -132,7 +132,7 @@ serializeJson(doc, message);
 void isyMQTT::loop(void)               //////////////////////////  main loop check for changes in any of the io's and publish them to the node server
 {
   isyclient->loop();
-int thevalue;
+float thevalue;
 String mesg;
  mesg = Device;
 String dataoutput;
@@ -145,12 +145,12 @@ int newdataflage = 0;
       while (pincount <= analogcount)
           {
            thevalue =  *analoginval[pincount];
- // Serial.println(pincount);
-           if (thevalue != lastanaloginval[pincount])
+            if (thevalue != lastanaloginval[pincount])
               {
 //           //    dataoutput = '{"AO' + String(pincount)': "' String(analoginval[pincount]'"}';
-             mystatus["AI" + String(pincount)] = *analoginval[pincount];
- 
+             mystatus["AI" + String(pincount)] = (*analoginval[pincount] / 100.00);
+  Serial.println("here " + String(*analoginval[pincount] / 100) + " from AI output");
+
               lastanaloginval[pincount] =  thevalue;
               newdataflage = 1;  /// set flag to send new data
                }
@@ -168,9 +168,8 @@ int newdataflage = 0;
            if (thevalue != lastanalogoutval[pincount])
               {
 //           //    dataoutput = '{"AO' + String(pincount)': "' String(analoginval[pincount]'"}';
-             mystatus["AO" + String(pincount)] = *analogoutval[pincount];
-  Serial.println("analog out pincount = " + String(pincount ));
-  Serial.println(" analogval =" + String(*analogoutval[pincount]));
+             mystatus["AO" + String(pincount)] = (*analogoutval[pincount] / 100.00);
+// Serial.println("here " + String(tmpval) + " from AO output");
               lastanalogoutval[pincount] =  thevalue;
               newdataflage = 1;  /// set flag to send new data
                }
@@ -257,7 +256,7 @@ StaticJsonDocument<1024> instatus;
   }
   ///////////////////////////////////// analog out
      // Deserialize the JSON document
-int mee;
+float mee;
 pincount = 1; 
 Serial.println(mypayload.substring(2,5) + "at start of output");
 if (( isymqtt->analogoutcount != 0) && ( mypayload.substring(2,4) == "AO"))
@@ -268,29 +267,30 @@ if (( isymqtt->analogoutcount != 0) && ( mypayload.substring(2,4) == "AO"))
               {
 //           //    dataoutput = '{"AO' + String(pincount)': "' String(analoginval[pincount]'"}';
              mee = instatus["AO1"]; 
-              Serial.println(String(mee) + "here 1 from analod A1");
+             mee = mee*100;
              *isymqtt->analogoutval[1] = mee;
+              Serial.println(String(*isymqtt->analogoutval[1]) + "here 1 from analod A1");
                }
            if ((payload.substring(2,5) == "AO2") && (isymqtt->analogoutcount >= 2))
               {
              mee = instatus["AO2"]; 
               Serial.println(String(mee) + "here 2 from analog AO2");
-             *isymqtt->analogoutval[2] = mee;
+             *isymqtt->analogoutval[2] = (mee * 100);
                }
            if ((payload.substring(2,5) == "AO3") && (isymqtt->analogoutcount >= 3))
               {
              mee = instatus["AO3"]; 
-             *isymqtt->analogoutval[3] = mee;
+             *isymqtt->analogoutval[3] = (mee * 100);
                }
            if ((payload.substring(2,5) == "AO4") && (isymqtt->analogoutcount >= 4))
               {
              mee = instatus["AO4"]; 
-             *isymqtt->analogoutval[4] = mee;
+             *isymqtt->analogoutval[4] = (mee * 100);
                }
            if ((payload.substring(2,5) == "AO5") && (isymqtt->analogoutcount >= 5))
               {
              mee = instatus["AO5"]; 
-             *isymqtt->analogoutval[5] = mee;
+             *isymqtt->analogoutval[5] = (mee * 100);
                }
              pincount++;
 

@@ -57,10 +57,10 @@ void loop()
 
   // Execute delayed toggle of built  in led without slowing down loop
 if (mytime <= millis())    {
-//delay(5000);
+//delay this part of the loop runs every 5 sec
     if (me == 0)
         {
-        ledout = 0;
+        ledout = 0;         ////////////    this just toggles the on board led
         mytime = millis();
         mytime = mytime + 5000;
         me = 100;

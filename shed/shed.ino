@@ -28,6 +28,7 @@ int battin;
 int acout;
 int ledout;
 int setout;
+int pass = 0;
 
 
 
@@ -60,30 +61,32 @@ void loop()
 
 
   // Execute delayed toggle of built  in led without slowing down loop
-if (mytime <= millis())    {
+if (mytime <= millis())    
+  {
 //delay this part of the loop runs every 3 sec
-count++;
-batv[count] = analogRead(Analogin);
-if (count == 10)
-{
+  count++;
+  pass++;
+  batv[count] = analogRead(Analogin);
+  if (count == 10)
+  {
   count = 0;
-  battin = ((batv[1] + batv[2] + batv[3] + batv[4] + batv[5] + batv[6] + batv[7] + batv[8] + batv[9] + batv[10])/10 ) / 1.271;  //  get average of 10 readings and devide by trim amount
+  battin = ((batv[1] + batv[2] + batv[3] + batv[4] + batv[5] + batv[6] + batv[7] + batv[8] + batv[9] + batv[10])/10 ) / 1.427;  //  get average of 10 readings and devide by trim amount
   }
-    if (me == 0)
+    if ((me == 0) && (pass == 9))
         {
         ledout = 0;         ////////////    this just toggles the on board led
-        mytime = millis();
-        mytime = mytime + 3000;
         me = 100;
         }
-    else {                                     // was here
+    if (pass == 10) {                                     // was here
         ledout = 100;
-        mytime = millis();
-        mytime = mytime + 3000;
         me = 0;
+        pass = 0;
         }
+ 
+  mytime = millis();
+  mytime = mytime + 1000;
+  }
 
-}
 if (setout >= battin )
 {
       digitalWrite(Digout, LOW); 

@@ -24,10 +24,11 @@ int me;
 int batv[11];
 int count = 0;
 
-int battin;
-int acout;
-int ledout;
-int setout;
+int battin;    // battery voltage in
+int charge;     // percent charge
+int acout;      // turns off power converter to save battery
+int ledout;     // on board led to act as heart beat
+int setout;     // set the point to turn off power converter
 int pass = 0;
 
 
@@ -41,6 +42,7 @@ thismqtt.start(1,1,0,2);  //start the connection start(num of digital imputs, nu
 
 ////// each io is declared type of io (variable int, discription to be displayed)
 thismqtt.analoginput(&battin,"battery voltage");
+thismqtt.analoginput(&charge,"battery percent of charge");
 thismqtt.analogoutput(&setout,"AC power trip point");
 thismqtt.digitaloutput(&acout,"main 120vac power to shed");
 thismqtt.digitaloutput(&ledout,"on board led");
@@ -86,13 +88,37 @@ if (mytime <= millis())
   mytime = millis();
   mytime = mytime + 1000;
   }
+if (battin > 1270)
+{
+    charge = 10000;
+} else if ((battin >= 1250) && (battin <= 1260)) {
+    charge = 9000;
+} else if ((battin >= 1242) && (battin <= 1248)) {
+    charge = 8000;
+} else if ((battin >= 1232) && (battin <= 1241)) {
+    charge = 7000;
+} else if ((battin >= 1220) && (battin <= 1231)) {
+    charge = 6000;
+} else if ((battin >= 1206) && (battin <= 1219)) {
+    charge = 5000;
+} else if ((battin >= 1190) && (battin <= 1205)) {
+    charge = 4000;
+} else if ((battin >= 1175) && (battin <= 1189)) {
+    charge = 3000;
+} else if ((battin >= 1158) && (battin <= 1174)) {
+    charge = 2000;
+} else if ((battin >= 1131) && (battin <= 1157)) {
+    charge = 1000;
+} else if (battin <= 1130) {
+   charge = 0;
+} 
 
-if (setout >= battin )
+
+if (setout >= battin ) 
 {
       digitalWrite(Digout, LOW); 
       acout = 0;
-}
-else {
+} else if (setout + 10 <= battin) {
       digitalWrite(Digout, HIGH); 
       acout = 100 ;
 }

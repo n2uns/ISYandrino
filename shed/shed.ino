@@ -118,7 +118,7 @@ if (setout >= battin )
 {
       digitalWrite(Digout, LOW); 
       acout = 0;
-} else if (setout + 10 <= battin) {
+} else if (setout + 20 <= battin) {
       digitalWrite(Digout, HIGH); 
       acout = 100 ;
 }

@@ -29,6 +29,7 @@ int charge;     // percent charge
 int acout;      // turns off power converter to save battery
 int ledout;     // on board led to act as heart beat
 int setout;     // set the point to turn off power converter
+int seton;     // set the point to turn on power converter
 int pass = 0;
 
 
@@ -44,6 +45,7 @@ thismqtt.start(1,1,0,2);  //start the connection start(num of digital imputs, nu
 thismqtt.analoginput(&battin,"battery voltage");
 thismqtt.analoginput(&charge,"battery percent of charge");
 thismqtt.analogoutput(&setout,"AC power trip point");
+thismqtt.analogoutput(&seton,"AC power on point");
 thismqtt.digitaloutput(&acout,"main 120vac power to shed");
 thismqtt.digitaloutput(&ledout,"on board led");
 thismqtt.run(&thismqtt, devicename); //// builds discriptor of the node infomation
@@ -118,7 +120,8 @@ if (setout >= battin )
 {
       digitalWrite(Digout, LOW); 
       acout = 0;
-} else if (setout + 30 <= battin) {
+} 
+if (seton <= battin) {
       digitalWrite(Digout, HIGH); 
       acout = 100 ;
 }
